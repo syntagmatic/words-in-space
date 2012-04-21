@@ -1,5 +1,5 @@
-if (!('initialized' in localStorage)) {
-  localStorage['initialized'] = true;
+if (!('words-initialized' in localStorage)) {
+  localStorage['words-initialized'] = true;
 
   var poems= [
     "i too am untranslatable",
