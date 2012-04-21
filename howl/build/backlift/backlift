@@ -1,0 +1,6 @@
+#!/usr/bin/python
+
+import backlift
+
+if __name__ == "__main__":
+    backlift.execute_command_line()

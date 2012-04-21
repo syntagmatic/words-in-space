@@ -1,0 +1,6 @@
+include README
+include LICENSE
+include backlift
+include backlift.py
+include distribute_setup.py
+include setup.py
