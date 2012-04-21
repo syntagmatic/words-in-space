@@ -47,12 +47,24 @@
     ctx.font = "10pt monospace";
     ctx.textBaseline = "top";
 
-    $('canvas').click(function(e) {
-      if ($(entry).offset().top > 0) {
+    $('canvas').click(createWord);
+
+    $('input[type=text]').keypress(function(e) {
+      // enter
+      if (e.which == 13) {
+        createWord({
+          x: Math.random()*ctx.canvas.width,
+          y: Math.random()*ctx.canvas.height,
+        });
+      };
+    });
+
+    function createWord(e) {
+      if ($(entry).val().length > 0) {
         var poem = Poems.create({
           text: $(entry).val()
         });
-        render(poem);
+        render(poem,$(entry).offset().left,$(entry).offset().top);
       }
 
       $(entry).val("");
@@ -61,20 +73,23 @@
         left: e.x-10,
       });
       $(entry).focus();
-    });
+    }
 
-    Poems.each(function(poem) {
-      queue.push(poem);
-    });
+    $(entry).css({
+        top: Math.random()*ctx.canvas.width,
+        left: Math.random()*ctx.canvas.height
+    }).focus();
 
-    function render(poem) {
+    var queue = Poems.shuffle();
+
+    function render(poem,x,y) {
       ctx.fillStyle = "rgba(250,250,250,0.04)";
       ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
-      ctx.fillStyle = "#333";
+      ctx.fillStyle = "#111";
 
       var text = poem.get('text'),
-             x = Math.random()*2/3*ctx.canvas.width,
-             y = Math.random()*ctx.canvas.height;
+             x = x || Math.random()*2/3*ctx.canvas.width,
+             y = y || Math.random()*ctx.canvas.height;
 
       ctx.fillText(text, x, y);
     };
@@ -85,6 +100,7 @@
       if (Date.now() - last < interval) return;
       last = Date.now();
       if (queue.length == 0) {
+        queue = Poems.shuffle();
       } else {
         render(queue.splice(0,1)[0]);
       }
